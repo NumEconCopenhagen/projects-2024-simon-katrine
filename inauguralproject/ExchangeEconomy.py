@@ -13,9 +13,12 @@ class ExchangeEconomyClass:
         # b. endowments
         par.w1A = 0.8
         par.w2A = 0.3
+        par.w1B = 0.2
+        par.w2B = 0.7
 
         # c. vector
         par.p2 = 1
+
 
 
     def utility_A(self,x1A,x2A):
@@ -47,13 +50,13 @@ class ExchangeEconomyClass:
         """ Consumer B's demand for good 1 """
 
         par = self.par
-        return par.beta*((p1*(1-par.w1A)+par.p2*(1-par.w2A))/p1)
+        return par.beta*((p1*par.w1B+par.p2*par.w2B)/p1)
     
     def demand_B2(self,p1):
         """ Consumer B's demand for good 2 """
 
         par = self.par
-        return (1-par.beta)*((p1*(1-par.w1A)+par.p2*(1-par.w2A))/par.p2)
+        return (1-par.beta)*((p1*par.w1B+par.p2*par.w2B)/par.p2)
 
     def check_market_clearing(self,p1):
 
