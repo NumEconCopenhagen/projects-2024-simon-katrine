@@ -15,7 +15,7 @@ class ExchangeEconomyClass:
         par.w2A = 0.3
 
         # c. vector
-        par.p2=1
+        par.p2 = 1
 
 
     def utility_A(self,x1A,x2A):
@@ -59,8 +59,6 @@ class ExchangeEconomyClass:
 
         par = self.par
 
-        #x1A,x2A = self.demand_A1(p1)
-        #x1B,x2B = self.demand_B1(p1)
         x1A = self.demand_A1(p1)
         x2A = self.demand_A2(p1)
         x1B = self.demand_B1(p1)
@@ -70,3 +68,4 @@ class ExchangeEconomyClass:
         eps2 = x2A - par.w2A + x2B - (1 - par.w2A)
 
         return eps1,eps2
+    
