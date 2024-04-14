@@ -1,14 +1,16 @@
 # Data analysis project
 
-Our project is titled **PROJECT TITLE** and is about EXPLAIN.
+Our project is titled **The Phillips curve** and is about EXPLAIN.
 
 The **results** of the project can be seen from running [dataproject.ipynb](dataproject.ipynb).
 
 We apply the **following datasets**:
 
-1. dataX.csv (*source*) 
-1. dataY.csv (*source*)
+1. PRIIS113.csv (*statistikbanken.dk*) 
+1. AUS09.csv (*statistikbanken.dk*)
 
 **Dependencies:** Apart from a standard Anaconda Python 3 installation, the project requires the following installations:
 
 ``pip install matplotlib-venn``
+``pip install plotly_express``
+``pip install seaborn``
