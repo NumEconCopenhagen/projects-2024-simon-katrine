@@ -14,3 +14,4 @@ We apply the **following datasets**:
 ``pip install matplotlib-venn``
 ``pip install plotly_express``
 ``pip install seaborn``
+``pip install git+https://github.com/alemartinello/dstapi``
