@@ -6,7 +6,7 @@ The **results** of the project can be seen from running [dataproject.ipynb](data
 
 We apply the **following datasets**:
 
-1. PRIIS113.csv (*statistikbanken.dk*) 
+1. PRIS113.csv (*statistikbanken.dk*) 
 1. AUS09.csv (*statistikbanken.dk*)
 
 **Dependencies:** Apart from a standard Anaconda Python 3 installation, the project requires the following installations:
