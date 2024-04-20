@@ -1,9 +1,8 @@
-# \[Group name\]
+# \[simon-katrine\]
 
 **Group members:**
-- A
-- B
-- C
+- Anne Katrine Landt
+- Simon D. Antonsen
 
 This repository contains  
 1. Inaugural project. 
