@@ -9,7 +9,7 @@ We apply the **following datasets**:
 1. PRIS113.csv (*statistikbanken.dk*) 
 2. AUS09.csv (*statistikbanken.dk*)
 
-Make sure you either download the folder or also download PRIS113 when running the code
+Make sure that PRIS113 is downloaded.
 
 **Dependencies:** Apart from a standard Anaconda Python 3 installation, the project requires the following installations:
 
