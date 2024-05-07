@@ -67,8 +67,13 @@ class ExchangeEconomyClass:
         x1B = self.demand_B1(p1)
         x2B = self.demand_B2(p1)
 
-        eps1 = x1A - par.w1A + x1B - (1 - par.w1A)
-        eps2 = x2A - par.w2A + x2B - (1 - par.w2A)
+        eps1 = x1A + x1B - 1
+        eps2 = x2A + x2B - 1
+
+        if x1A > 1 or x1A < 0 or x2A < 0 or x2A > 1: 
+            return 1+abs(x1A), 1+abs(x2A)
 
         return eps1,eps2
-    
+
+
+ 
