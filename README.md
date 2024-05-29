@@ -1,10 +1,10 @@
 # \[simon-katrine\]
 
 **Group members:**
-- Anne Katrine Landt
-- Simon D. Antonsen
+- Anne Katrine Landt (ztd943)
+- Simon D. Antonsen (qgh660)
 
 This repository contains  
 1. Inaugural project. 
-2. Data project. We fetch data from **source x** on **y** and show that ...
-3. Model project. We model ...
+2. Data project. We fetch data from **statistikbanken.dk** and apply **PRIS113** and **AUS09**. We investigate the correlation between unemployement and inflation in Denmark from 2007-2023.
+3. Model project. We model the Solow Model with semi-endogenous and endogenous growth to technology.  
