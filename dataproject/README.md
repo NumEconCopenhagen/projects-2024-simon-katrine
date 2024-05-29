@@ -1,6 +1,6 @@
 # Data analysis project
 
-Our project is titled **The Phillips curve** and is about the correlation between unemployment and inflation in Denmark from 2007-2023. 
+Our project is titled **The Phillips curve**. We investigate the correlation between unemployment and inflation in Denmark from 2007-2023. 
 
 The **results** of the project can be seen from running [dataproject.ipynb](dataproject.ipynb).
 
@@ -19,4 +19,4 @@ Make sure that PRIS113 is downloaded.
 ``pip install pandas-datareader``
 ``pip install git+https://github.com/alemartinello/dstapi``
 
-The results from the project is that there is no clear correlation between unemployment rate and inflation (or expected inflation)
+We find that there is no clear correlation between unemployment rate and inflation, and therefore the Phillips Curve do not allign with the empirical data from the period 2007-2023.
