@@ -70,9 +70,6 @@ class ExchangeEconomyClass:
         eps1 = x1A + x1B - 1
         eps2 = x2A + x2B - 1
 
-        if x1A > 1 or x1A < 0 or x2A < 0 or x2A > 1: 
-            return 1+abs(x1A), 1+abs(x2A)
-
         return eps1,eps2
 
 
