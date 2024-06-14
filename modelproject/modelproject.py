@@ -12,5 +12,6 @@ class modelprojectclass:
         par.n = 0.02
         par.delta = 0.05
         par.phi = 0.5
+        par.L = 1
   
     
