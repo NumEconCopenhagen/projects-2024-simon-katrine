@@ -10,6 +10,19 @@ class ExamClass():
 
         par = self.par = SimpleNamespace()
 
+        # Question 1 paramters
+        par.A = 1.0
+        par.gamma = 0.5
+        par.alpha = 0.3
+        par.nu = 1.0
+        par.epsilon = 2.0
+
+        par.tau = 0.0
+        par.T = 0.0
+
+        par.w = 1 # Wage as numeraire
+
+        # Question 2 paramters 
         par.J = 3
         par.N = 10
         par.K = 10000
@@ -22,17 +35,73 @@ class ExamClass():
         par.c = 1
         par.question_2 = False
 
+    # For question 1
+    def labor_demand_1(p1, self):
+        par = self.par
+        return (p1 * par.A * par.gamma / par.w)**(1 / (1 - par.gamma))
 
+    def labor_demand_2(p2, self):
+        par = self.par
+        return (p2 * par.A * par.gamma / par.w)**(1 / (1 - par.gamma))
+
+    def production_output_1(p1, self):
+        par = self.par
+
+        L1 = self.labor_demand_1(p1)
+        return par.A * L1**par.gamma
+
+    def production_output_2(p2, self):
+        par = self.par
+
+        L2 = self.labor_demand_2(p2)
+        return par.A * L2**par.gamma
+
+    def profit_1(p1, self):
+        par = self.par
+
+        L1 = self.labor_demand_1(p1)
+        return ((1-par.gamma)/par.gamma)*par.w*L1
+
+    def profit_2(p2, self):
+        par = self.par
+
+        L2 = self.labor_demand_2(p2)
+        return ((1-par.gamma)/par.gamma)*par.w*L2
+
+    def consumer_demand_1(self, p1, p2):
+        par = self.par
+
+        L1 = self.labor_demand_1(p1)
+        pi1 = self.profit_1(p1)
+        pi2 = self.profit_2(p2)
+        
+        return par.alpha((par.w * L1 + par.T + pi1 + pi2 / p1))
+    
+    def consumer_demand_2(self, p1, p2):
+        par = self.par
+
+        L2 = self.labor_demand_2(p2)
+        pi1 = self.profit_1(p1)
+        pi2 = self.profit_2(p2)
+        
+        return (1-par.alpha)((par.w * L2 + par.T + pi1 + pi2 / (p2 + par.tau)))
+
+    def labor_supply(self):
+        par = self.par
+
+        return np.log(self.consumer_demand_1(p1)**par.alpha * self.consumer_demand_2(p2)**(1-par.alpha))-par.nu*
+
+    # For question 2
     def simulate_career_choices(self):
 
         par = self.par 
+
         np.random.seed(0)  # set seed
     
         # we initialize storage for results for K simulations and N individuals
         self.prior_expectation= np.zeros((par.K, par.N))
         self.chosen_career = np.zeros((par.K, par.N), dtype=int)
         self.realized_value= np.zeros((par.K, par.N))
-        #self.switch_shares = np.zeros((par.N, par.J))
 
         for k in range(par.K):
             for i in range(par.N):
