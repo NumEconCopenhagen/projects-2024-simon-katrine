@@ -94,7 +94,7 @@ class ExamClass():
 
         c1 = self.consumer_demand_1(p1, p2)
         c2 = self.consumer_demand_2(p1, p2)
-        return par.alpha / c1 + (1 - par.alpha) / c2 - par.nu * l**par.epsilon
+        return par.alpha / c1 + (1 - par.alpha) / c2 - par.nu * l**par.epsilon #differentiad l*
     
     def compute_market_errors(self, p1, p2):
         
@@ -134,25 +134,24 @@ class ExamClass():
         for k in range(par.K):
             for i in range(par.N):
                 
-                # 1) First we should find the prior expected average utility of each career track given the friends
-                # Since person i has i friends, and par.F = np.arange(1,par.N+1) and we loop over N = 10, but python starts the loop at 0, then F[0] = 1 aka F[i] = i
-                # We start out by finding friends epsilon
-                friend_epsilon = np.random.normal(loc=0, scale=par.sigma, size=(par.F[i], par.J))  # par.F[i] and par.J since it is J*F_i
+                # 1)find the prior expected average utility of each career track given the friends
+                # Since person i has i friends in each career, and par.F = np.arange(1,par.N+1) and we loop over N = 10, but python starts the loop at 0, then F[0] = 1 aka F[i] = i's friends
+                friend_epsilon = np.random.normal(loc=0, scale=par.sigma, size=(par.F[i], par.J))  
                 friend_utility = par.v + friend_epsilon
                 prior_expected_average_utility = np.mean(friend_utility, axis=0)
 
-                # we should also find their own noise term, epsilon
-                own_epsilon = np.random.normal(loc=0, scale=par.sigma, size=(par.J)) #par.J since it is their J noise terms
+                # their own noise term, epsilon
+                own_epsilon = np.random.normal(loc=0, scale=par.sigma, size=(par.J)) 
             
-                # 2) we should now find the career track with the highest expected utility 
+                # 2) find the career track with the highest expected utility 
                 highest_expected_utility = np.argmax(prior_expected_average_utility)
             
-                # 3) Store det different things
-                # We should now store the choosen careers (highest expected average utility), 
+                # 3) 
+                # store the choosen careers (highest expected average utility), 
                 self.chosen_career[k, i] = highest_expected_utility
-                # We should store the prior expectation of their chosen carer 
+                # store the prior expectation of their chosen carer 
                 self.prior_expectation[k, i] = prior_expected_average_utility[highest_expected_utility]
-                # We should store the realized value of their chosen career track
+                # store the realized value of their chosen career track
                 own_utility = par.v + own_epsilon
                 self.realized_value[k, i] = own_utility[highest_expected_utility]
 
@@ -169,7 +168,7 @@ class ExamClass():
         return self.chosen_career, self.prior_expectation, self.realized_value
 
 
-    def find_closest_points(X, y):
+    def find_closest_points(X,y):
         rng = np.random.default_rng(2024)
         X = rng.uniform(size=(50,2))
         y = rng.uniform(size=(2,))
@@ -178,17 +177,18 @@ class ExamClass():
         B = None
         C = None
         D = None
+
         min_dist_A = float('inf')
         min_dist_B = float('inf')
         min_dist_C = float('inf')
         min_dist_D = float('inf')
     
         for x in X:
-            if x[0] > y[0] and x[1] > y[1]:
-                dist = np.linalg.norm(x - y)
-                if dist < min_dist_A:
-                    min_dist_A = dist
-                    A = x
+            if x[0] > y[0] and x[1] > y[1]: # check the condtion
+                dist = np.linalg.norm(x - y) # find distance between x and y
+                if dist < min_dist_A: # check if the found distance is less than the stored distance 
+                    min_dist_A = dist # if it is it updates min_dist_A
+                    A = x # updates A to store the point x
                 
             elif x[0] > y[0] and x[1] < y[1]:
                 dist = np.linalg.norm(x - y)
