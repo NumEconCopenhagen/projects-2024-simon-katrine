@@ -130,9 +130,11 @@ class ExamClass():
         self.prior_expectation= np.zeros((par.K, par.N))
         self.chosen_career = np.zeros((par.K, par.N), dtype=int)
         self.realized_value= np.zeros((par.K, par.N))
+        self.switch_shares = np.zeros((par.N, par.J))
 
         for k in range(par.K):
             for i in range(par.N):
+                initial_career = self.chosen_career[k, i]
             
                 # 1) First we should find the prior expected average utility of each career track given the friends
                 # Since person i has i friends, and par.F = np.arange(1,par.N+1) and we loop over N = 10, but python starts the loop at 0, then F[0] = 1 aka F[i] = i
@@ -140,11 +142,6 @@ class ExamClass():
                 friend_epsilon = np.random.normal(loc=0, scale=par.sigma, size=(par.F[i], par.J))  # par.F[i] and par.J since it is J*F_i
                 friend_utility = par.v + friend_epsilon
                 prior_expected_average_utility = np.mean(friend_utility, axis=0)
-
-                if par.question_2:
-                    for j in range(par.J):
-                        if j != self.chosen_career[k, i]:
-                            prior_expected_average_utility[j] -= par.c
 
                 # we should also find their own noise term, epsilon
                 own_epsilon = np.random.normal(loc=0, scale=par.sigma, size=(par.J)) #par.J since it is their J noise terms
@@ -162,11 +159,16 @@ class ExamClass():
                 self.realized_value[k, i] = own_utility[highest_expected_utility]
 
                 if par.question_2:
-                    for j in range(par.J):
-                        if j != self.chosen_career[k, i]:
-                            self.realized_value[k, i] = own_utility[highest_expected_utility] - par.c
+                    if self.chosen_career[k, i] != initial_career:
+                        self.prior_expectation[k, i] -=  par.c
+                        self.realized_value[k, i] -= par.c
+            
+                    if self.chosen_career[k, i] != initial_career:
+                        self.switch_shares[i, initial_career] += 1
+                
+        self.switch_shares /= par.K
         
-        return self.chosen_career, self.prior_expectation, self.realized_value
+        return self.chosen_career, self.prior_expectation, self.realized_value, self.switch_shares
     
 
 
