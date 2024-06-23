@@ -35,10 +35,7 @@ class ExamClass():
         par.c = 1
         par.question_2 = False
 
-        # Question 3 parameters
-        rng = np.random.default_rng(2024)
-        par.X = rng.uniform(size=(50,2))
-        par.y = rng.uniform(size=(2,))
+    
 
 
     # For question 1
@@ -169,6 +166,52 @@ class ExamClass():
         self.switch_shares /= par.K
         
         return self.chosen_career, self.prior_expectation, self.realized_value, self.switch_shares
+
+
+    def find_closest_points(X, y):
+        rng = np.random.default_rng(2024)
+        X = rng.uniform(size=(50,2))
+        y = rng.uniform(size=(2,))
+        
+        A = None
+        B = None
+        C = None
+        D = None
+        min_dist_A = float('inf')
+        min_dist_B = float('inf')
+        min_dist_C = float('inf')
+        min_dist_D = float('inf')
+    
+        for x in X:
+            if x[0] > y[0] and x[1] > y[1]:
+                dist = np.linalg.norm(x - y)
+                if dist < min_dist_A:
+                    min_dist_A = dist
+                    A = x
+                
+            elif x[0] > y[0] and x[1] < y[1]:
+                dist = np.linalg.norm(x - y)
+                if dist < min_dist_B:
+                    min_dist_B = dist
+                    B = x
+                
+            elif x[0] < y[0] and x[1] < y[1]:
+                dist = np.linalg.norm(x - y)
+                if dist < min_dist_C:
+                    min_dist_C = dist
+                    C = x
+                
+            elif x[0] < y[0] and x[1] > y[1]:
+                dist = np.linalg.norm(x - y)
+                if dist < min_dist_D:
+                    min_dist_D = dist
+                    D = x
+    
+        return A, B, C, D
+
+
+
+
     
 
 
