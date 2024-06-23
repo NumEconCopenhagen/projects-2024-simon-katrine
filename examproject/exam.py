@@ -127,12 +127,13 @@ class ExamClass():
         self.prior_expectation= np.zeros((par.K, par.N))
         self.chosen_career = np.zeros((par.K, par.N), dtype=int)
         self.realized_value= np.zeros((par.K, par.N))
-        self.switch_shares = np.zeros((par.N, par.J))
+
+        # Additional storage to track switches
+        initial_career = np.zeros(par.N, dtype=int)
 
         for k in range(par.K):
             for i in range(par.N):
-                initial_career = self.chosen_career[k, i]
-            
+                
                 # 1) First we should find the prior expected average utility of each career track given the friends
                 # Since person i has i friends, and par.F = np.arange(1,par.N+1) and we loop over N = 10, but python starts the loop at 0, then F[0] = 1 aka F[i] = i
                 # We start out by finding friends epsilon
@@ -152,27 +153,27 @@ class ExamClass():
                 # We should store the prior expectation of their chosen carer 
                 self.prior_expectation[k, i] = prior_expected_average_utility[highest_expected_utility]
                 # We should store the realized value of their chosen career track
-                own_utility = par.v + np.mean(own_epsilon, axis=0)
+                own_utility = par.v + own_epsilon
                 self.realized_value[k, i] = own_utility[highest_expected_utility]
 
+                # Store the initial career choice for the first year
+                if k == 0:
+                    initial_career[i] = highest_expected_utility
+
                 if par.question_2:
-                    if self.chosen_career[k, i] != initial_career:
-                        self.prior_expectation[k, i] -=  par.c
+                    new_highest_expected_utility = np.argmax(own_utility)
+                    if new_highest_expected_utility != highest_expected_utility:
+                        self.prior_expectation[k, i] -= par.c
                         self.realized_value[k, i] -= par.c
-            
-                    if self.chosen_career[k, i] != initial_career:
-                        self.switch_shares[i, initial_career] += 1
-                
-        self.switch_shares /= par.K
-        
-        return self.chosen_career, self.prior_expectation, self.realized_value, self.switch_shares
+                        
+        return self.chosen_career, self.prior_expectation, self.realized_value
 
 
     def find_closest_points(X, y):
         rng = np.random.default_rng(2024)
         X = rng.uniform(size=(50,2))
         y = rng.uniform(size=(2,))
-        
+
         A = None
         B = None
         C = None
