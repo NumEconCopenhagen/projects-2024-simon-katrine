@@ -1,6 +1,5 @@
 from types import SimpleNamespace
 import numpy as np
-import pandas as pd
 from scipy.optimize import fsolve
 
 class ExamClass():
@@ -10,7 +9,7 @@ class ExamClass():
 
         par = self.par = SimpleNamespace()
 
-        # Question 1 paramters
+        # Question 1 parameters
         par.A = 1.0
         par.gamma = 0.5
         par.alpha = 0.3
@@ -20,9 +19,10 @@ class ExamClass():
         par.tau = 0.0
         par.T = 0.0
 
-        par.w = 1 # Wage as numeraire
+        # Wage as numeraire
+        par.w = 1 
 
-        # Question 2 paramters 
+        # Question 2 parameters 
         par.J = 3
         par.N = 10
         par.K = 10000
