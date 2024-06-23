@@ -1,11 +1,11 @@
 from types import SimpleNamespace
 import numpy as np
+import pandas as pd
+from scipy.optimize import fsolve
 
 class ExamClass():
      
-    # Question 1
-
-    # Question 2
+    # Parameters needed 
     def __init__(self):
 
         par = self.par = SimpleNamespace()
@@ -36,33 +36,33 @@ class ExamClass():
         par.question_2 = False
 
     # For question 1
-    def labor_demand_1(p1, self):
+    def labor_demand_1(self,p1):
         par = self.par
         return (p1 * par.A * par.gamma / par.w)**(1 / (1 - par.gamma))
 
-    def labor_demand_2(p2, self):
+    def labor_demand_2(self,p2):
         par = self.par
         return (p2 * par.A * par.gamma / par.w)**(1 / (1 - par.gamma))
 
-    def production_output_1(p1, self):
+    def production_output_1(self,p1):
         par = self.par
 
         L1 = self.labor_demand_1(p1)
         return par.A * L1**par.gamma
 
-    def production_output_2(p2, self):
+    def production_output_2(self,p2):
         par = self.par
 
         L2 = self.labor_demand_2(p2)
         return par.A * L2**par.gamma
 
-    def profit_1(p1, self):
+    def profit_1(self,p1):
         par = self.par
 
         L1 = self.labor_demand_1(p1)
         return ((1-par.gamma)/par.gamma)*par.w*L1
 
-    def profit_2(p2, self):
+    def profit_2(self,p2):
         par = self.par
 
         L2 = self.labor_demand_2(p2)
@@ -71,25 +71,47 @@ class ExamClass():
     def consumer_demand_1(self, p1, p2):
         par = self.par
 
-        L1 = self.labor_demand_1(p1)
         pi1 = self.profit_1(p1)
         pi2 = self.profit_2(p2)
+        L1 = self.labor_demand_1(p1)
         
-        return par.alpha((par.w * L1 + par.T + pi1 + pi2 / p1))
+        return par.alpha*((par.w * L1 + par.T + pi1 + pi2) / p1)
     
     def consumer_demand_2(self, p1, p2):
         par = self.par
 
-        L2 = self.labor_demand_2(p2)
         pi1 = self.profit_1(p1)
         pi2 = self.profit_2(p2)
+        L2 = self.labor_demand_2(p1)
         
-        return (1-par.alpha)((par.w * L2 + par.T + pi1 + pi2 / (p2 + par.tau)))
+        return (1-par.alpha)*((par.w * L2 + par.T + pi1 + pi2) / (p2 + par.tau))
 
-    def labor_supply(self):
+    def labor_supply_eq(self,l,p1,p2):
         par = self.par
 
-        return np.log(self.consumer_demand_1(p1)**par.alpha * self.consumer_demand_2(p2)**(1-par.alpha))-par.nu*
+        c1 = self.consumer_demand_1(p1, p2)
+        c2 = self.consumer_demand_2(p1, p2)
+        return par.alpha / c1 + (1 - par.alpha) / c2 - par.nu * l**par.epsilon
+    
+    def compute_market_errors(self, p1, p2):
+        
+        # Labor market error
+        L1 = self.labor_demand_1(p1)
+        L2 = self.labor_demand_2(p2)
+        labor_supply = fsolve(lambda l: self.labor_supply_eq(l,p1, p2), x0=1.0)[0]
+        labor_error = L1 + L2 - labor_supply
+
+        # Goods market 1 error
+        y1 = self.production_output_1(p1)
+        c1 = self.consumer_demand_1(p1, p2)
+        goods1_error = y1 - c1
+
+        # Goods market 2 error
+        y2 = self.production_output_2(p2)
+        c2 = self.consumer_demand_2(p1, p2)
+        goods2_error = y2 - c2
+        
+        return labor_error, goods1_error, goods2_error
 
     # For question 2
     def simulate_career_choices(self):
