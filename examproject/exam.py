@@ -35,6 +35,12 @@ class ExamClass():
         par.c = 1
         par.question_2 = False
 
+        # Question 3 parameters
+        rng = np.random.default_rng(2024)
+        par.X = rng.uniform(size=(50,2))
+        par.y = rng.uniform(size=(2,))
+
+
     # For question 1
     def labor_demand_1(self,p1):
         par = self.par
