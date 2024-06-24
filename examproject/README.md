@@ -1,6 +1,6 @@
 # Exam project
 
-The **results** of the project can be seen from running [examproject.ipynb](examproject.ipynb).
+The **results** of the project can be seen from running [exam_2024.ipynb](exam_2024.ipynb).
 
 The **eqations** behind the project can be seen in [exam.py](exam.py).
 
