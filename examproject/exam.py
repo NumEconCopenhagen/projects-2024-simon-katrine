@@ -15,6 +15,7 @@ class ExamClass():
         par.alpha = 0.3
         par.nu = 1.0
         par.epsilon = 2.0
+        par.kappa = 0.1
 
         par.tau = 0.0
         par.T = 0.0
@@ -33,7 +34,7 @@ class ExamClass():
         par.v = np.array([1,2,3])
 
         par.c = 1
-        par.question_2 = False
+        par.question_3 = False
 
     
 
@@ -115,6 +116,28 @@ class ExamClass():
         goods2_error = y2 - c2
         
         return labor_error, goods1_error, goods2_error
+    
+    def utility(self, c1, c2, l):
+        par = self.par
+        return np.log(c1 ** par.alpha * c2 ** (1 - par.alpha)) - par.nu * (l ** (1 + par.epsilon)) / (1 + par.epsilon)
+
+    def update_transfer(self, tau, p1, p2):
+        par = self.par
+        c2 = self.consumer_demand_2(p1, p2)
+        par.T = tau * c2
+
+    def social_welfare(self, tau, p1, p2):
+        par = self.par
+
+        self.update_transfer(tau, p1, p2)
+        y2 = self.production_output_2(p2)
+        c1 = self.consumer_demand_1(p1, p2)
+        c2 = self.consumer_demand_2(p1, p2)
+        L = fsolve(lambda l: self.labor_supply_eq(l, p1, p2), x0=1.0)[0]  # Solve for labor supply
+        U = self.utility(c1, c2, L)
+        return U - par.kappa * y2
+
+    
 
     # For question 2
     def simulate_career_choices(self):
@@ -127,9 +150,7 @@ class ExamClass():
         self.prior_expectation= np.zeros((par.K, par.N))
         self.chosen_career = np.zeros((par.K, par.N), dtype=int)
         self.realized_value= np.zeros((par.K, par.N))
-
-        # Additional storage to track switches
-        initial_career = np.zeros(par.N, dtype=int)
+        self.j_own_utility= np.zeros((par.K, par.N))
 
         for k in range(par.K):
             for i in range(par.N):
@@ -149,22 +170,35 @@ class ExamClass():
                 # 3) 
                 # store the choosen careers (highest expected average utility), 
                 self.chosen_career[k, i] = highest_expected_utility
+    
                 # store the prior expectation of their chosen carer 
                 self.prior_expectation[k, i] = prior_expected_average_utility[highest_expected_utility]
+                
                 # store the realized value of their chosen career track
                 own_utility = par.v + own_epsilon
                 self.realized_value[k, i] = own_utility[highest_expected_utility]
+            
+                if par.question_3:
+                    # we define their current utility as the utility when choosing j^*
+                    current_utility = own_utility[highest_expected_utility]
 
-                # Store the initial career choice for the first year
-                if k == 0:
-                    initial_career[i] = highest_expected_utility
+                    for j in range(par.J):
+                        if j != highest_expected_utility: 
+                            # we find the expected utility given j
+                            expected_utility_switch = prior_expected_average_utility[j]
 
-                if par.question_2:
-                    new_highest_expected_utility = np.argmax(own_utility)
-                    if new_highest_expected_utility != highest_expected_utility:
-                        self.prior_expectation[k, i] -= par.c
-                        self.realized_value[k, i] -= par.c
-                        
+                            # if their expected utility from a switch minus the cost c is higher than their current utility they switch
+                            if expected_utility_switch - par.c > current_utility:
+                                # we update their career choice, prior expectation and realized value
+                                self.chosen_career[k, i] = j
+                                self.prior_expectation[k, i] = prior_expected_average_utility[j] - par.c
+                                self.realized_value[k, i] = own_utility[j] - par.c
+                                break  # break loop after first valid switch
+
+                        # if no switch occurs nothing changes
+                        self.prior_expectation[k, i] = prior_expected_average_utility[highest_expected_utility]
+                        self.realized_value[k, i] = own_utility[highest_expected_utility]
+                    
         return self.chosen_career, self.prior_expectation, self.realized_value
 
 
