@@ -201,7 +201,7 @@ class ExamClass():
                     
         return self.chosen_career, self.prior_expectation, self.realized_value
 
-
+    # For question 3
     def find_closest_points(X,y):
         rng = np.random.default_rng(2024)
         X = rng.uniform(size=(50,2))
